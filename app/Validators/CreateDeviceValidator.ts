@@ -10,7 +10,7 @@ export default class CreateDeviceValidator {
       rules.maxLength(200)
     ]),
     topic: schema.string([
-      rules.alpha(),
+      rules.regex(/:/),
       rules.unique({ column: 'topic', table: 'devices' })
     ])
   })
