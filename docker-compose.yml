@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+  api:
+    container_name: api
+    build: .
+    ports:
+      - 3333:3333
+    depends_on:
+      - mysql
+      - redis
+  mysql:
+    container_name: mysql
+    image: mysql
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DB_NAME}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_RANDOM_ROOT_PASSWORD='yes'
+    volumes:
+      - database:/var/lib/mysql
+  redis:
+    container_name: redis
+    image: redis:7.0-alpine
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+
+volumes:
+  database:
+  redis:
